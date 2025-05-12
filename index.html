@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة نماذج الذكاء الاصطناعي</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff; /* أزرق جذاب */
+            --secondary-color: #6a0dad; /* بنفسجي عصري */
+            --accent-color: #17a2b8;  /* سماوي منعش */
+            --highlight-color: #ffc107; /* أصفر للتمييز */
+            --light-bg: #fdfdff; /* خلفية فاتحة جداً */
+            --dark-bg: #1a1d24;  /* خلفية داكنة أنيقة */
+            --card-bg-light: #ffffff;
+            --card-bg-dark: #2c303a;
+            --text-color-light: #333;
+            --text-color-dark: #f0f0f0;
+            --footer-text-light: #555;
+            --footer-text-dark: #bbb;
+            --card-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            --border-radius: 12px; /* زوايا أكثر نعومة */
+            --transition: all 0.35s ease-in-out;
+            --font-family-arabic: 'Cairo', sans-serif;
+            --font-family-latin: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            font-family: var(--font-family-arabic);
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color-light);
+            transition: var(--transition);
+            line-height: 1.75;
+            display: flex; /* Added for footer positioning */
+            flex-direction: column; /* Added for footer positioning */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+        }
+        
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--text-color-dark);
+        }
+
+        .hidden-section {
+            display: none !important; 
+        }
+
+        .page-wrapper { /* New wrapper for content excluding fixed theme toggle */
+            flex-grow: 1; /* Allows content to take available space */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        section { /* Ensure sections can grow and push footer down */
+            flex-grow: 1;
+            display: flex; /* For internal alignment if needed */
+            flex-direction: column; /* For internal alignment if needed */
+        }
+
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem; 
+            width: 100%; /* Ensure container takes width for centering */
+            box-sizing: border-box; /* Include padding in width calculation */
+        }
+
+        /* --- Theme Toggle Button --- */
+        .theme-toggle-container {
+            position: fixed; 
+            top: 20px;
+            left: 20px; 
+            z-index: 1000;
+        }
+        .theme-toggle {
+            background: var(--card-bg-light);
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            width: 50px; 
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            font-size: 1.5rem; 
+            color: var(--primary-color);
+        }
+        body.dark-mode .theme-toggle {
+            background: var(--card-bg-dark);
+            border-color: #444;
+            color: var(--highlight-color);
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- Landing Page Styles --- */
+        #landingPage {
+            /* display: flex; /* This is now handled by the section tag and JS */
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 60px; /* Space for theme toggle */
+            padding-bottom: 2rem; /* Space before footer */
+            background: linear-gradient(135deg, rgba(230, 237, 255, 0.7) 0%, rgba(220, 230, 250, 0.5) 100%);
+        }
+        body.dark-mode #landingPage {
+             background: linear-gradient(135deg, rgba(30, 35, 45, 0.7) 0%, rgba(25, 28, 38, 0.5) 100%);
+        }
+
+        .landing-content {
+            background-color: var(--card-bg-light);
+            padding: 2.5rem 3rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            max-width: 750px;
+            width: 90%; /* Ensure content doesn't stretch too wide */
+            margin: auto; /* Center content block */
+        }
+        body.dark-mode .landing-content {
+            background-color: var(--card-bg-dark);
+        }
+
+        .landing-title {
+            font-family: var(--font-family-arabic);
+            font-size: 3rem; 
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        body.dark-mode .landing-title {
+            color: #79bbff;
+        }
+
+        .landing-subtitle {
+            font-size: 1.25rem; 
+            color: #555;
+            margin-bottom: 3rem; 
+            line-height: 1.7;
+        }
+        body.dark-mode .landing-subtitle {
+            color: #ccc;
+        }
+
+        .nav-buttons-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            width: 100%;
+            align-items: center;
+        }
+
+        .nav-button {
+            display: block;
+            width: 90%;
+            max-width: 380px;
+            padding: 1rem 1.8rem; 
+            font-size: 1.15rem; 
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: none;
+            cursor: pointer;
+        }
+        .nav-button:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+        }
+
+        .nav-button-openai {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .nav-button-gemini {
+            background-color: var(--secondary-color); 
+            color: white;
+        }
+
+        /* --- Sub-Page Common Styles (OpenAI & Gemini Pages) --- */
+        #openaiModelsPage, #geminiModelsPage {
+            padding-top: 80px; /* Space for theme toggle and header */
+            padding-bottom: 2rem; /* Space before footer */
+        }
+        .sub-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        body.dark-mode .sub-page-header {
+            border-bottom-color: var(--highlight-color);
+        }
+
+        .sub-page-title {
+            font-family: var(--font-family-arabic);
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        body.dark-mode .sub-page-title {
+            color: #79bbff;
+        }
+
+        .home-link-button {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.7rem 1.4rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: none;
+            cursor: pointer;
+        }
+        .home-link-button:hover {
+            background-color: #138496; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* --- Card Styles (Common for OpenAI & Gemini) --- */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); 
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: var(--card-bg-light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid #e9e9e9;
+            display: flex;
+            flex-direction: column;
+            cursor: default; 
+        }
+        body.dark-mode .card {
+            background: var(--card-bg-dark);
+            border-color: #3a3f4b;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            color: white;
+            padding: 1.75rem;
+            position: relative;
+            border-bottom: 1px solid transparent;
+        }
+        .card-header .icon {
+            position: absolute;
+            top: 1.5rem; 
+            left: 1.5rem; 
+            font-size: 2rem; 
+            opacity: 0.8;
+        }
+        .card h2 {
+            font-family: var(--font-family-arabic);
+            margin: 0 0 0 3rem; 
+            font-size: 1.7rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        /* OpenAI Card Colors */
+        #openaiModelsPage .cards-container .card:nth-child(3n+1) .card-header {
+             background: linear-gradient(135deg, var(--primary-color), #0056b3);
+        }
+        #openaiModelsPage .cards-container .card:nth-child(3n+2) .card-header {
+            background: linear-gradient(135deg, var(--accent-color), #117a8b);
+        }
+        #openaiModelsPage .cards-container .card:nth-child(3n) .card-header {
+            background: linear-gradient(135deg, #5a6268, #343a40); 
+        }
+
+        /* Gemini Card Colors */
+        #geminiModelsPage .cards-container .card:nth-child(4n+1) .card-header { 
+             background: linear-gradient(135deg, #8E2DE2, #4A00E0); 
+        }
+        #geminiModelsPage .cards-container .card:nth-child(4n+2) .card-header { 
+            background: linear-gradient(135deg, #1D976C, #93F9B9); 
+        }
+        #geminiModelsPage .cards-container .card:nth-child(4n+3) .card-header { 
+            background: linear-gradient(135deg, #f2709c, #ff9472); 
+        }
+        #geminiModelsPage .cards-container .card:nth-child(4n) .card-header { 
+            background: linear-gradient(135deg, #43cea2, #185a9d); 
+        }
+        
+        .card-body {
+            padding: 1.75rem;
+            flex-grow: 1;
+        }
+        
+        .card-body p {
+            margin-top: 0;
+            margin-bottom: 1rem; 
+            font-size: 0.98rem; 
+            line-height: 1.7;
+            color: var(--text-color-light);
+        }
+        body.dark-mode .card-body p {
+            color: #d0d0d0;
+        }
+
+        .card-body .model-description, .card-body p strong:first-child { 
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        body.dark-mode .card-body .model-description, body.dark-mode .card-body p strong:first-child {
+            color: var(--highlight-color);
+        }
+        
+        .feature-list { 
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 1.2rem;
+        }
+        .feature-list li {
+            padding: 0.6rem 0;
+            position: relative;
+            padding-right: 2rem; 
+            font-size: 0.95rem;
+            border-bottom: 1px dashed #eee;
+        }
+        .feature-list li:last-child { border-bottom: none; }
+        body.dark-mode .feature-list li { border-bottom-color: #444; }
+        .feature-list li::before {
+            content: '✓';
+            color: var(--accent-color);
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .data-points { 
+            margin-bottom: 1rem;
+        }
+        .data-points strong {
+            font-weight: 600;
+            color: #333;
+        }
+        body.dark-mode .data-points strong {
+            color: #e0e0e0;
+        }
+        
+        .examples {
+            background-color: #f5f7fa; 
+            border-radius: calc(var(--border-radius) - 6px);
+            padding: 1.2rem;
+            margin-top: 1.5rem; 
+        }
+        body.dark-mode .examples {
+            background-color: #252830;
+        }
+        
+        .examples h4 {
+            font-family: var(--font-family-arabic);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: var(--secondary-color); 
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        body.dark-mode .examples h4 {
+            color: #c59dfa; 
+        }
+        
+        .examples ul {
+            padding-right: 1.5rem; 
+            list-style-position: outside;
+            margin-bottom: 0;
+        }
+        
+        .examples li {
+            margin-bottom: 0.6rem;
+            font-size: 0.92rem; 
+        }
+        
+        /* --- Footer Styles --- */
+        .site-footer {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: auto; /* Pushes footer to bottom if content is short */
+            background-color: var(--card-bg-light);
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            color: var(--footer-text-light);
+        }
+        body.dark-mode .site-footer {
+            background-color: var(--card-bg-dark);
+            border-top-color: #3a3f4b;
+            color: var(--footer-text-dark);
+        }
+        .site-footer p {
+            margin: 0.3rem 0;
+        }
+        .site-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        body.dark-mode .site-footer a {
+            color: var(--highlight-color);
+        }
+        .site-footer a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .landing-content { animation: fadeIn 0.6s ease-out 0.1s forwards; opacity: 0; }
+        .nav-button-openai { animation: fadeIn 0.5s ease-out 0.3s forwards; opacity: 0;}
+        .nav-button-gemini { animation: fadeIn 0.5s ease-out 0.4s forwards; opacity: 0;}
+        
+        /* Responsive styles */
+        @media (max-width: 992px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 1.5rem 1rem; }
+            .landing-title { font-size: 2.4rem; }
+            .landing-subtitle { font-size: 1.1rem; }
+            .landing-content { padding: 2rem 1.5rem; }
+            .nav-button { width: 100%; font-size: 1.05rem; padding: 0.9rem 1.5rem;}
+            .sub-page-title { font-size: 2rem; }
+            .home-link-button { padding: 0.6rem 1.2rem; font-size: 0.9rem;}
+            .card h2 { font-size: 1.5rem; }
+            .site-footer { font-size: 0.85rem; padding: 1rem; }
+        }
+        @media (max-width: 480px) {
+            .landing-title { font-size: 2rem; }
+            .landing-subtitle { font-size: 1rem; }
+            .sub-page-title { font-size: 1.7rem; }
+            .card h2 { font-size: 1.3rem; margin-left: 2.5rem;}
+            .card-header .icon { font-size: 1.6rem; left: 1rem; top: 1.2rem;}
+            .card-body p { font-size: 0.9rem; }
+            .examples li { font-size: 0.85rem; }
+            .theme-toggle-container { top: 10px; left: 10px; }
+            .theme-toggle { width: 40px; height: 40px; font-size: 1.2rem; }
+            .site-footer p { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-toggle-container">
+        <button class="theme-toggle" id="themeToggle" aria-label="تبديل السمة">🌓</button>
+    </div>
+
+    <div class="page-wrapper">
+        <section id="landingPage">
+            <div class="container">
+                <div class="landing-content">
+                    <h1 class="landing-title">موسوعة نماذج الذكاء الاصطناعي</h1>
+                    <p class="landing-subtitle">
+                        اكتشف وتصفح أحدث نماذج الذكاء الاصطناعي من OpenAI و Google Gemini. تعرّف على قدراتها المتنوعة وتطبيقاتها المبتكرة في عالم التكنولوجيا الحديثة.
+                    </p>
+                    <div class="nav-buttons-container">
+                        <button class="nav-button nav-button-openai" data-target="openaiModelsPage">نماذج OpenAI / ChatGPT</button>
+                        <button class="nav-button nav-button-gemini" data-target="geminiModelsPage">نماذج Gemini من جوجل</button>
+                    </div>
+                </div>
+            </div>
+            <footer class="site-footer">
+                <p>تصميم إسلام محمد</p>
+                <p><a href="mailto:eslam.mohamed@nagwa.com">eslam.mohamed@nagwa.com</a></p>
+            </footer>
+        </section>
+
+        <section id="openaiModelsPage" class="hidden-section">
+            <div class="container">
+                <div class="sub-page-header">
+                    <h1 class="sub-page-title">نماذج OpenAI / ChatGPT</h1>
+                    <button class="home-link-button" data-target="landingPage">العودة للرئيسية</button>
+                </div>
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🚀</span><h2>GPT-4o</h2></div>
+                        <div class="card-body">
+                            <p><strong>الأفضل للمهام اليومية والوسائط المتعددة</strong></p>
+                            <ul class="feature-list">
+                                <li>تلخيص، رسائل البريد الإلكتروني، المحتوى الإبداعي</li>
+                                <li>متعدد الوسائط بالكامل: يدعم المستندات، الصور، ملفات CSV، الصوت، الفيديو</li>
+                            </ul>
+                            <div class="examples"><h4>أمثلة للاستخدام:</h4><ul><li>تلخيص محاضر الاجتماعات</li><li>كتابة بريد متابعة</li><li>تصحيح تقرير</li><li>العصف الذهني مع رفع صور أو رسومات</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">✨</span><h2>GPT-4.5</h2></div>
+                        <div class="card-body">
+                            <p><strong>مثالي للمهام الإبداعية</strong></p>
+                            <ul class="feature-list">
+                                <li>التواصل العاطفي</li>
+                                <li>التعاون</li>
+                                <li>الكتابة</li>
+                            </ul>
+                            <div class="examples"><h4>أمثلة للاستخدام:</h4><ul><li>منشور جذاب على LinkedIn</li><li>وصف منتج</li><li>رسالة اعتذار للعملاء بنبرة متعاطفة</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">⚡</span><h2>o4-mini</h2></div>
+                        <div class="card-body">
+                            <p><strong>مهام تقنية سريعة</strong></p>
+                            <ul class="feature-list">
+                                <li>استفسارات STEM</li>
+                                <li>برمجة</li>
+                                <li>منطق بصري</li>
+                            </ul>
+                            <div class="examples"><h4>أمثلة للاستخدام:</h4><ul><li>استخراج بيانات من ملف CSV</li><li>تلخيص مقال علمي</li><li>تصحيح خطأ Python بسرعة</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">💡</span><h2>o4-mini-high</h2></div>
+                        <div class="card-body">
+                            <p><strong>مهام تقنية دقيقة</strong></p>
+                            <ul class="feature-list">
+                                <li>برمجة متقدمة</li>
+                                <li>رياضيات</li>
+                                <li>شروحات علمية</li>
+                            </ul>
+                            <div class="examples"><h4>أمثلة للاستخدام:</h4><ul><li>حل معادلة رياضية مع الشرح</li><li>إنشاء استعلامات SQL</li><li>شرح مفهوم علمي بلغة مبسطة</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">⚙️</span><h2>o3</h2></div>
+                        <div class="card-body">
+                            <p><strong>المهام المعقدة متعددة الخطوات</strong></p>
+                            <ul class="feature-list">
+                                <li>تخطيط استراتيجي</li>
+                                <li>تحليلات تفصيلية</li>
+                                <li>برمجة متقدمة</li>
+                            </ul>
+                            <div class="examples"><h4>أمثلة للاستخدام:</h4><ul><li>تحليل مخاطر لتوسّع السوق</li><li>إعداد خطة استراتيجية</li><li>تحليل بيانات CSV وتوقع الاتجاهات</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🏆</span><h2>o1-pro</h2></div>
+                        <div class="card-body">
+                            <p><strong>المنطق المعقد والمهام التحليلية طويلة المدى</strong></p>
+                            <ul class="feature-list">
+                                <li>تحليل متقدم</li>
+                                <li>بحوث شاملة</li>
+                                <li>توقعات دقيقة</li>
+                            </ul>
+                            <div class="examples"><h4>أمثلة للاستخدام:</h4><ul><li>مذكرة تحليل مخاطر لقوانين الخصوصية الأوروبية</li><li>ملخص بحثي لعدة صفحات</li><li>خوارزمية للتنبؤ المالي</li></ul></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="site-footer">
+                <p>تصميم إسلام محمد</p>
+                <p><a href="mailto:eslam.mohamed@nagwa.com">eslam.mohamed@nagwa.com</a></p>
+            </footer>
+        </section>
+
+        <section id="geminiModelsPage" class="hidden-section">
+            <div class="container">
+                <div class="sub-page-header">
+                    <h1 class="sub-page-title">نماذج Gemini من جوجل</h1>
+                    <button class="home-link-button" data-target="landingPage">العودة للرئيسية</button>
+                </div>
+                <div class="cards-container">
+                    <div class="card">
+                        <div class="card-header"><span class="icon">💎</span><h2>Gemini 2.5 Pro</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">أقوى نموذج تفكير بدقة استجابة عالية وأداء متطور.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> صوت، صور، فيديو، نص.</p><p><strong>المخرجات:</strong> نص.</p></div>
+                            <div class="examples"><h4>الأمثل لـ:</h4><ul><li>التفكير المعزز والاستدلال المعقد</li><li>الفهم العميق متعدد الوسائط</li><li>البرمجة المتقدمة وحل المشكلات الصعبة</li><li>تحليل قواعد بيانات ضخمة</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">⚡</span><h2>Gemini 2.5 Flash</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">أفضل نموذج من حيث السعر مقابل الأداء بقدرات متوازنة.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> صوت، صور، فيديو، نص.</p><p><strong>المخرجات:</strong> نص.</p></div>
+                            <div class="examples"><h4>الأمثل لـ:</h4><ul><li>تفكير تكيفي ومرن حسب الحاجة</li><li>كفاءة عالية في التكلفة للمهام الكبيرة</li><li>المهام ذات الكم الكبير بزمن استجابة منخفض</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🌟</span><h2>Gemini 2.0 Flash</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">نموذج متعدد الوسائط بميزات الجيل القادم وقدرات محسنة.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> صوت، صور، فيديو، نص.</p><p><strong>المخرجات:</strong> نص.</p></div>
+                            <div class="examples"><h4>الاستخدامات:</h4><ul><li>توليد الكود والصور بكفاءة</li><li>استخراج البيانات وتحليل الملفات</li><li>إنشاء الرسوم البيانية وتصور البيانات</li><li>أداء محسّن لتجارب الوكلاء الذكية</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🖼️</span><h2>Gemini 2.0 Flash - توليد الصور</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">توليد صور وتحريرها بطريقة تفاعلية ومبتكرة.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> صوت، صور، فيديو، نص.</p><p><strong>المخرجات:</strong> نص، صور.</p></div>
+                            <div class="examples"><h4>الأمثل لـ:</h4><ul><li>توليد الصور من الأوصاف النصية</li><li>تحرير الصور وتعديلها بناءً على الأوامر</li><li>إنشاء محتوى مرئي تفاعلي وجذاب</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🧠</span><h2>Gemini 1.5 Pro</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">قوي لمهام الاستدلال المعقدة التي تتطلب ذكاءً أعلى وسياقًا طويلاً.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> صوت، صور، فيديو، نص (نافذة سياق تصل إلى مليون توكن).</p><p><strong>المخرجات:</strong> نص.</p></div>
+                            <div class="examples"><h4>الأمثل لـ:</h4><ul><li>فهم وتحليل مستندات طويلة جداً (كتب، أبحاث)</li><li>استدلال متعدد الخطوات عبر كميات كبيرة من المعلومات</li><li>مهام معقدة تتطلب فهم عميق للسياق والتفاصيل الدقيقة</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🎨</span><h2>Imagen 3</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">أفضل نموذج لتوليد صور عالية الجودة وواقعية بتفاصيل مذهلة.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> نص.</p><p><strong>المخرجات:</strong> صور.</p></div>
+                            <div class="examples"><h4>الأمثل لـ:</h4><ul><li>توليد صور فوتوغرافية واقعية</li><li>إنشاء أعمال فنية فريدة من النصوص</li><li>فهم دقيق لتفاصيل النص المطلوب وتمثيلها بصرياً</li><li>تحكم دقيق في الأنماط والعناصر المرئية</li></ul></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header"><span class="icon">🎬</span><h2>Veo 2</h2></div>
+                        <div class="card-body">
+                            <p class="model-description">لتوليد فيديو عالي الجودة من النصوص والصور بقدرات متقدمة.</p>
+                            <div class="data-points"><p><strong>المدخلات:</strong> نص، صور.</p><p><strong>المخرجات:</strong> فيديو.</p></div>
+                            <div class="examples"><h4>الأمثل لـ:</h4><ul><li>إنشاء مقاطع فيديو قصيرة ومؤثرات بصرية</li><li>تحويل الأفكار النصية إلى محتوى مرئي متحرك</li><li>توليد لقطات فيديو متنوعة بجودة سينمائية</li><li>تحكم في أسلوب الفيديو وحركته</li></ul></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="site-footer">
+                <p>تصميم إسلام محمد</p>
+                <p><a href="mailto:eslam.mohamed@nagwa.com">eslam.mohamed@nagwa.com</a></p>
+            </footer>
+        </section>
+    </div>
+
+    <script>
+        // --- Theme Toggle Functionality ---
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme) {
+            body.classList.toggle('dark-mode', savedTheme === 'dark-mode');
+            themeToggle.textContent = savedTheme === 'dark-mode' ? '☀️' : '🌓';
+        } else if (prefersDark) {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        } else {
+            themeToggle.textContent = '🌓';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            let currentTheme = body.classList.contains('dark-mode') ? 'dark-mode' : 'light-mode';
+            themeToggle.textContent = currentTheme === 'dark-mode' ? '☀️' : '🌓';
+            localStorage.setItem('theme', currentTheme);
+        });
+
+        // --- Navigation Functionality (Show/Hide Sections) ---
+        const landingPage = document.getElementById('landingPage');
+        const openaiPage = document.getElementById('openaiModelsPage');
+        const geminiPage = document.getElementById('geminiModelsPage');
+        const allSections = [landingPage, openaiPage, geminiPage];
+
+        function showSection(targetId) {
+            allSections.forEach(section => {
+                section.style.animation = '';
+                
+                if (section.id === targetId) {
+                    section.classList.remove('hidden-section'); 
+                    
+                    if (section.id === 'landingPage') {
+                        section.style.display = 'flex'; 
+                    } else {
+                        section.style.display = 'flex'; // Keep flex for subpages too for footer
+                    }
+                    
+                    section.style.opacity = '0'; 
+                    section.style.animation = 'fadeIn 0.5s ease-out forwards';
+
+                    const cards = section.querySelectorAll('.cards-container .card');
+                    cards.forEach((card, index) => {
+                        card.style.opacity = '0'; 
+                        card.style.animation = `fadeIn 0.5s ease-out ${0.1 + index * 0.1}s forwards`;
+                    });
+
+                } else {
+                    section.classList.add('hidden-section'); 
+                    section.style.display = 'none'; 
+                }
+            });
+            window.scrollTo(0, 0); 
+        }
+
+        document.querySelectorAll('[data-target]').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-target');
+                showSection(targetId);
+            });
+        });
+        
+        if (landingPage) {
+             landingPage.style.display = 'flex'; 
+             landingPage.style.opacity = '0'; 
+             // Animate landing content and buttons
+             const landingContent = landingPage.querySelector('.landing-content');
+             if(landingContent) {
+                 landingContent.style.opacity = '0';
+                 landingContent.style.animation = 'fadeIn 0.6s ease-out 0.1s forwards';
+             }
+             const navButtons = landingPage.querySelectorAll('.nav-button');
+             navButtons.forEach((btn, index) => {
+                 btn.style.opacity = '0';
+                 btn.style.animation = `fadeIn 0.5s ease-out ${0.3 + index * 0.15}s forwards`;
+             });
+             // Animate footer for landing page
+             const landingFooter = landingPage.querySelector('.site-footer');
+             if(landingFooter){
+                landingFooter.style.opacity = '0';
+                landingFooter.style.animation = 'fadeIn 0.6s ease-out 0.5s forwards';
+             }
+        }
+        if (openaiPage) openaiPage.style.display = 'none'; 
+        if (geminiPage) geminiPage.style.display = 'none';
+
+    </script>
+</body>
+</html>
+
+
