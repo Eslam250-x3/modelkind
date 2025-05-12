@@ -36,9 +36,9 @@
             color: var(--text-color-light);
             transition: var(--transition);
             line-height: 1.75;
-            display: flex; /* Added for footer positioning */
-            flex-direction: column; /* Added for footer positioning */
-            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
         }
         
         body.dark-mode {
@@ -50,16 +50,16 @@
             display: none !important; 
         }
 
-        .page-wrapper { /* New wrapper for content excluding fixed theme toggle */
-            flex-grow: 1; /* Allows content to take available space */
+        .page-wrapper { 
+            flex-grow: 1; 
             display: flex;
             flex-direction: column;
         }
         
-        section { /* Ensure sections can grow and push footer down */
+        section { 
             flex-grow: 1;
-            display: flex; /* For internal alignment if needed */
-            flex-direction: column; /* For internal alignment if needed */
+            display: flex; 
+            flex-direction: column; 
         }
 
 
@@ -67,8 +67,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1.5rem; 
-            width: 100%; /* Ensure container takes width for centering */
-            box-sizing: border-box; /* Include padding in width calculation */
+            width: 100%; 
+            box-sizing: border-box; 
         }
 
         /* --- Theme Toggle Button --- */
@@ -104,12 +104,11 @@
 
         /* --- Landing Page Styles --- */
         #landingPage {
-            /* display: flex; /* This is now handled by the section tag and JS */
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding-top: 60px; /* Space for theme toggle */
-            padding-bottom: 2rem; /* Space before footer */
+            padding-top: 60px; 
+            padding-bottom: 2rem; 
             background: linear-gradient(135deg, rgba(230, 237, 255, 0.7) 0%, rgba(220, 230, 250, 0.5) 100%);
         }
         body.dark-mode #landingPage {
@@ -122,8 +121,8 @@
             border-radius: var(--border-radius);
             box-shadow: var(--card-shadow);
             max-width: 750px;
-            width: 90%; /* Ensure content doesn't stretch too wide */
-            margin: auto; /* Center content block */
+            width: 90%; 
+            margin: auto; 
         }
         body.dark-mode .landing-content {
             background-color: var(--card-bg-dark);
@@ -189,8 +188,8 @@
 
         /* --- Sub-Page Common Styles (OpenAI & Gemini Pages) --- */
         #openaiModelsPage, #geminiModelsPage {
-            padding-top: 80px; /* Space for theme toggle and header */
-            padding-bottom: 2rem; /* Space before footer */
+            padding-top: 80px; 
+            padding-bottom: 2rem; 
         }
         .sub-page-header {
             display: flex;
@@ -407,7 +406,7 @@
         .site-footer {
             text-align: center;
             padding: 1.5rem 1rem;
-            margin-top: auto; /* Pushes footer to bottom if content is short */
+            margin-top: auto; 
             background-color: var(--card-bg-light);
             border-top: 1px solid #e0e0e0;
             font-size: 0.9rem;
@@ -439,9 +438,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .landing-content { animation: fadeIn 0.6s ease-out 0.1s forwards; opacity: 0; }
-        .nav-button-openai { animation: fadeIn 0.5s ease-out 0.3s forwards; opacity: 0;}
-        .nav-button-gemini { animation: fadeIn 0.5s ease-out 0.4s forwards; opacity: 0;}
+        /* Initial animations for landing page elements are handled in JS */
         
         /* Responsive styles */
         @media (max-width: 992px) {
@@ -690,29 +687,38 @@
 
         function showSection(targetId) {
             allSections.forEach(section => {
-                section.style.animation = '';
+                section.style.animation = ''; // Reset animation before hiding/showing
                 
                 if (section.id === targetId) {
                     section.classList.remove('hidden-section'); 
                     
+                    // Set correct display type for the section to be shown
                     if (section.id === 'landingPage') {
                         section.style.display = 'flex'; 
                     } else {
-                        section.style.display = 'flex'; // Keep flex for subpages too for footer
+                        section.style.display = 'flex'; // Use flex for subpages too for footer stickiness
                     }
                     
-                    section.style.opacity = '0'; 
-                    section.style.animation = 'fadeIn 0.5s ease-out forwards';
+                    section.style.opacity = '0'; // Reset opacity before new animation
+                    section.style.animation = 'fadeIn 0.5s ease-out forwards'; // Apply fade-in
 
+                    // Stagger card animations if cards are present
                     const cards = section.querySelectorAll('.cards-container .card');
                     cards.forEach((card, index) => {
                         card.style.opacity = '0'; 
-                        card.style.animation = `fadeIn 0.5s ease-out ${0.1 + index * 0.1}s forwards`;
+                        card.style.animation = `fadeIn 0.5s ease-out ${0.2 + index * 0.1}s forwards`; // Adjusted delay start
                     });
+                    // Animate footer for the shown section
+                    const currentFooter = section.querySelector('.site-footer');
+                    if(currentFooter){
+                        currentFooter.style.opacity = '0';
+                        currentFooter.style.animation = 'fadeIn 0.6s ease-out 0.5s forwards';
+                    }
+
 
                 } else {
                     section.classList.add('hidden-section'); 
-                    section.style.display = 'none'; 
+                    section.style.display = 'none'; // Explicitly set display to none
                 }
             });
             window.scrollTo(0, 0); 
@@ -725,25 +731,26 @@
             });
         });
         
+        // Initial setup for landing page display and animations
         if (landingPage) {
-             landingPage.style.display = 'flex'; 
-             landingPage.style.opacity = '0'; 
-             // Animate landing content and buttons
+             landingPage.style.display = 'flex'; // Ensure it's flex for layout
+             landingPage.style.opacity = '0'; // Start transparent for fade-in
+             landingPage.style.animation = 'fadeIn 0.5s ease-out 0.1s forwards'; // Animate the section itself
+
              const landingContent = landingPage.querySelector('.landing-content');
              if(landingContent) {
                  landingContent.style.opacity = '0';
-                 landingContent.style.animation = 'fadeIn 0.6s ease-out 0.1s forwards';
+                 landingContent.style.animation = 'fadeIn 0.6s ease-out 0.2s forwards'; // Delay after section
              }
              const navButtons = landingPage.querySelectorAll('.nav-button');
              navButtons.forEach((btn, index) => {
                  btn.style.opacity = '0';
-                 btn.style.animation = `fadeIn 0.5s ease-out ${0.3 + index * 0.15}s forwards`;
+                 btn.style.animation = `fadeIn 0.5s ease-out ${0.4 + index * 0.15}s forwards`; // Delay after content
              });
-             // Animate footer for landing page
              const landingFooter = landingPage.querySelector('.site-footer');
              if(landingFooter){
                 landingFooter.style.opacity = '0';
-                landingFooter.style.animation = 'fadeIn 0.6s ease-out 0.5s forwards';
+                landingFooter.style.animation = 'fadeIn 0.6s ease-out 0.6s forwards'; // Delay after buttons
              }
         }
         if (openaiPage) openaiPage.style.display = 'none'; 
@@ -752,5 +759,3 @@
     </script>
 </body>
 </html>
-
-
